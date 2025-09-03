@@ -3,125 +3,510 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prototipo Python con Pyodide</title>
+    <title>Mizu Hebi Dyefet - Python en el Navegador</title>
     <style>
+        :root {
+            --egypt-gold: #D4AF37;
+            --egypt-turquoise: #40E0D0;
+            --japan-red: #DC143C;
+            --japan-green: #8FBC8F;
+            --dark-bg: #1a1a2e;
+            --light-bg: #f5f7fa;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #16213e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f7fa;
         }
+        
         .container {
-            background: white;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        h1 {
-            color: #2c3e50;
+        
+        header {
             text-align: center;
+            margin-bottom: 30px;
+            position: relative;
         }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--egypt-gold), var(--egypt-turquoise));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--egypt-turquoise);
+            margin-bottom: 15px;
+        }
+        
+        .symbols {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .symbol {
+            font-size: 1.8rem;
+            opacity: 0.8;
+        }
+        
+        .editor-section {
+            margin-bottom: 25px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .editor-title {
+            font-size: 1.3rem;
+            color: var(--japan-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .editor-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--japan-red), #e74c3c);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 20, 60, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
         textarea {
             width: 100%;
-            height: 200px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            line-height: 1.5;
             resize: vertical;
+            transition: all 0.3s ease;
         }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s;
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--egypt-turquoise);
+            box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.2);
         }
-        button:hover {
-            background-color: #2980b9;
+        
+        .output-section {
+            margin-top: 25px;
         }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .output-title {
+            font-size: 1.3rem;
+            color: var(--egypt-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         #output {
-            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
             padding: 15px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 5px;
             font-family: 'Courier New', monospace;
+            font-size: 15px;
+            line-height: 1.5;
+            min-height: 150px;
             white-space: pre-wrap;
-            min-height: 100px;
+            overflow-y: auto;
+            max-height: 400px;
         }
+        
         .status {
             text-align: center;
-            margin: 15px 0;
-            font-style: italic;
-            color: #7f8c8d;
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .status.loading {
+            background: rgba(64, 224, 208, 0.2);
+            color: var(--egypt-turquoise);
+            border: 1px solid rgba(64, 224, 208, 0.3);
+        }
+        
+        .status.ready {
+            background: rgba(139, 195, 74, 0.2);
+            color: #8BC34A;
+            border: 1px solid rgba(139, 195, 74, 0.3);
+        }
+        
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        
+        .examples {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .examples-title {
+            font-size: 1.3rem;
+            color: var(--japan-red);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .example-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .example-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--egypt-turquoise);
+        }
+        
+        .example-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .example-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--egypt-turquoise);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            textarea {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🐍 Prototipo Python con Pyodide</h1>
-        <p>Escribe código Python y ejecútalo directamente en tu navegador:</p>
+        <header>
+            <h1>Mizu Hebi Dyefet</h1>
+            <div class="subtitle">Python en el Navegador: Fusión de Agua Japonesa y Serpiente Egipcia</div>
+            <div class="symbols">
+                <span class="symbol">🐍</span>
+                <span class="symbol">+</span>
+                <span class="symbol">🌊</span>
+                <span class="symbol">+</span>
+                <span class="symbol">𓆓</span>
+            </div>
+        </header>
         
-        <textarea id="code" placeholder="Escribe tu código Python aquí...">
-# Ejemplo básico
-nombre = "Mundo"
-print(f"¡Hola, {nombre}!")
+        <section class="editor-section">
+            <div class="editor-header">
+                <div class="editor-title">
+                    <span>🐍</span>
+                    <span>Editor Python</span>
+                </div>
+                <div class="editor-controls">
+                    <button class="btn btn-secondary" id="clearBtn">Limpiar</button>
+                    <button class="btn btn-primary" id="runBtn">
+                        <span id="runBtnText">Ejecutar Código</span>
+                    </button>
+                </div>
+            </div>
+            <textarea id="code" placeholder="Escribe tu código Python aquí..."># Ejemplo con numpy - Mizu Hebi Dyefet
+# Este código calcula la secuencia Fibonacci usando numpy
 
-# Ejemplo con cálculos
-resultado = 5 * 8
-print(f"5 x 8 = {resultado}")
+import numpy as np
 
-# Ejemplo con bucles
-print("\nNúmeros del 1 al 5:")
-for i in range(1, 6):
-    print(i)
-        </textarea>
+def fibonacci(n):
+    fib = np.zeros(n, dtype=int)
+    fib[0], fib[1] = 0, 1
+    for i in range(2, n):
+        fib[i] = fib[i-1] + fib[i-2]
+    return fib
+
+# Mostrar los primeros 15 números Fibonacci
+n = 15
+resultado = fibonacci(n)
+print(f"Primeros {n} números Fibonacci:")
+print(resultado)
+
+# Calcular la suma y el promedio
+suma = np.sum(resultado)
+promedio = np.mean(resultado)
+print(f"\nSuma: {suma}")
+print(f"Promedio: {promedio:.2f}")
+
+# Crear un array con los conceptos del proyecto
+conceptos = np.array([
+    "Mizu (Agua)",
+    "Hebi (Serpiente)",
+    "Dyefet (Serpiente egipcia)"
+])
+print("\nElementos de Mizu Hebi Dyefet:")
+for i, concepto in enumerate(conceptos, 1):
+    print(f"{i}. {concepto}")
+</textarea>
+        </section>
         
-        <button id="runBtn">Ejecutar Código</button>
-        <div class="status" id="status">Cargando Python...</div>
-        <div id="output">Resultados aparecerán aquí...</div>
+        <div class="status loading" id="status">
+            <span class="loader"></span>
+            Cargando Python y numpy...
+        </div>
+        
+        <section class="output-section">
+            <div class="output-header">
+                <div class="output-title">
+                    <span>📜</span>
+                    <span>Resultados</span>
+                </div>
+                <button class="btn btn-secondary" id="copyBtn">Copiar</button>
+            </div>
+            <div id="output">Los resultados aparecerán aquí después de ejecutar el código...</div>
+        </section>
+        
+        <section class="examples">
+            <div class="examples-title">
+                <span>📚</span>
+                <span>Ejemplos de Código</span>
+            </div>
+            <div class="example-grid">
+                <div class="example-card" data-code="# Ejemplo: Ondas de agua (Mizu)
+import numpy as np
+import math
+
+# Simular ondas de agua
+x = np.linspace(0, 10, 100)
+y = np.sin(x) * np.exp(-x/10)
+
+print('Simulación de ondas de agua:')
+for i in range(0, len(x), 10):
+    print(f'x={x[i]:.1f}, altura={y[i]:.2f}')
+">
+                    <div class="example-title">Ondas de Agua (Mizu)</div>
+                    <div class="example-desc">Simula ondas de agua usando numpy</div>
+                    <div class="example-code">import numpy as np<br>import math<br>x = np.linspace(0, 10, 100)<br>y = np.sin(x) * np.exp(-x/10)</div>
+                </div>
+                
+                <div class="example-card" data-code="# Ejemplo: Espiral de Serpiente (Hebi)
+import numpy as np
+import math
+
+# Crear una espiral de serpiente
+theta = np.linspace(0, 6*np.pi, 100)
+r = theta / (2*np.pi)
+x = r * np.cos(theta)
+y = r * np.sin(theta)
+
+print('Espiral de serpiente (primeros 10 puntos):')
+for i in range(10):
+    print(f'Punto {i+1}: ({x[i]:.2f}, {y[i]:.2f})')
+">
+                    <div class="example-title">Espiral de Serpiente (Hebi)</div>
+                    <div class="example-desc">Genera una espiral que simula el movimiento de una serpiente</div>
+                    <div class="example-code">theta = np.linspace(0, 6*np.pi, 100)<br>r = theta / (2*np.pi)<br>x = r * np.cos(theta)<br>y = r * np.sin(theta)</div>
+                </div>
+                
+                <div class="example-card" data-code="# Ejemplo: Símbolos Egipcios (Dyefet)
+import numpy as np
+
+# Crear una matriz con símbolos egipcios
+simbolos = np.array([
+    ['𓀀', '𓀁', '𓀂'],
+    ['𓀃', '𓀄', '𓀅'],
+    ['𓀆', '𓀇', '𓀈']
+])
+
+print('Matriz de símbolos egipcios:')
+for fila in simbolos:
+    print(' '.join(fila))
+">
+                    <div class="example-title">Símbolos Egipcios (Dyefet)</div>
+                    <div class="example-desc">Muestra una matriz con jeroglíficos egipcios</div>
+                    <div class="example-code">simbolos = np.array([<br>  ['𓀀', '𓀁', '𓀂'],<br>  ['𓀃', '𓀄', '𓀅'],<br>  ['𓀆', '𓀇', '𓀈']<br>])</div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <p>Mizu Hebi Dyefet - Donde el código fluye como el agua y se transforma como la serpiente</p>
+            <p>Hecho con ❤️ usando Pyodide y GitHub Pages</p>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <script>
-        let pyodide;
+        // Elementos del DOM
         const output = document.getElementById('output');
         const status = document.getElementById('status');
         const runBtn = document.getElementById('runBtn');
+        const runBtnText = document.getElementById('runBtnText');
+        const clearBtn = document.getElementById('clearBtn');
+        const copyBtn = document.getElementById('copyBtn');
         const codeInput = document.getElementById('code');
-
+        const exampleCards = document.querySelectorAll('.example-card');
+        
+        let pyodide;
+        let isRunning = false;
+        
         // Inicializar Pyodide
         async function initPyodide() {
             try {
-                status.textContent = "Cargando Python (puede tardar 10-20 segundos)...";
+                status.className = 'status loading';
+                status.innerHTML = '<span class="loader"></span> Cargando Python...';
+                
+                // Cargar Pyodide
                 pyodide = await loadPyodide();
-                status.textContent = "¡Python listo! Puedes ejecutar código.";
+                
+                status.innerHTML = '<span class="loader"></span> Instalando numpy...';
+                
+                // Cargar numpy automáticamente
+                await pyodide.loadPackage("numpy");
+                
+                status.className = 'status ready';
+                status.textContent = '¡Python listo! (numpy disponible)';
                 runBtn.disabled = false;
             } catch (error) {
+                status.className = 'status error';
                 status.textContent = `Error: ${error.message}`;
-                output.textContent = "Error al cargar Python. Verifica tu conexión a internet.";
+                output.textContent = `Error al cargar Python o numpy:\n${error.message}`;
             }
         }
-
+        
         // Ejecutar código Python
         async function runPython() {
-            if (!pyodide) {
-                output.textContent = "Python aún no está cargado. Espera...";
-                return;
-            }
-
-            const code = codeInput.value;
-            output.textContent = "Ejecutando...\n";
+            if (!pyodide || isRunning) return;
+            
+            isRunning = true;
+            runBtn.disabled = true;
+            runBtnText.textContent = 'Ejecutando...';
+            output.textContent = 'Ejecutando código...\n';
             
             try {
-                // Capturar la salida estándar
+                // Configurar captura de salida
                 pyodide.runPython(`
                     import sys
                     from io import StringIO
@@ -130,7 +515,7 @@ for i in range(1, 6):
                 `);
 
                 // Ejecutar el código del usuario
-                pyodide.runPython(code);
+                pyodide.runPython(codeInput.value);
 
                 // Obtener resultados
                 const stdout = pyodide.runPython("sys.stdout.getvalue()");
@@ -143,13 +528,67 @@ for i in range(1, 6):
                 }
             } catch (error) {
                 output.textContent = `ERROR:\n${error.message}`;
+            } finally {
+                isRunning = false;
+                runBtn.disabled = false;
+                runBtnText.textContent = 'Ejecutar Código';
             }
         }
-
+        
+        // Limpiar editor
+        function clearEditor() {
+            codeInput.value = '';
+            output.textContent = 'Los resultados aparecerán aquí después de ejecutar el código...';
+        }
+        
+        // Copiar resultados
+        function copyResults() {
+            navigator.clipboard.writeText(output.textContent)
+                .then(() => {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = '¡Copiado!';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Error al copiar:', err);
+                });
+        }
+        
+        // Cargar ejemplo
+        function loadExample(code) {
+            codeInput.value = code;
+            codeInput.focus();
+        }
+        
         // Event listeners
         runBtn.addEventListener('click', runPython);
-        runBtn.disabled = true;
-
+        clearBtn.addEventListener('click', clearEditor);
+        copyBtn.addEventListener('click', copyResults);
+        
+        exampleCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const code = card.getAttribute('data-code');
+                loadExample(code);
+            });
+        });
+        
+        // Atajos de teclado
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Enter o Cmd+Enter para ejecutar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                runPython();
+            }
+            
+            // Ctrl+L o Cmd+L para limpiar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+                e.preventDefault();
+                clearEditor();
+            }
+        });
+        
         // Inicializar al cargar la página
         window.addEventListener('load', initPyodide);
     </script>
