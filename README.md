@@ -28,7 +28,7 @@ Un prototipo interactivo que ejecuta **Python directamente en el navegador** usa
 
 ## 🚀 Cómo Usar  
 1. **Visita la demo**:  
-   [https://[usuario].github.io/mizu-hebi-dyefet](https://[usuario].github.io/mizu-hebi-dyefet)  
+   [https://mizulegendsstudios.github.io/mizu-hebi-dyefet](https://mizulegendsstudios.github.io/mizu-hebi-dyefet)  
    *(Reemplaza `[usuario]` con tu nombre de usuario de GitHub)*  
 
 2. **Escribe código Python** en el editor:  
@@ -142,4 +142,4 @@ for angulo in range(0, 360, 30):
      - Egipto: Oro (#D4AF37), Turquesa (#40E0D0)  
      - Japón: Rojo torii (#DC143C), Verde musgo (#8FBC8F)  
 
-¡Tu proyecto ahora tiene una identidad cultural única y un README profesional! 🌊🐍
+
