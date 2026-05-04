@@ -1,9 +1,5 @@
 # 🐍 Mizu Hebi Dyefet  
 *Python en el Navegador: Fusión de Agua Japonesa y Serpiente Egipcia*  
-
-![Logo Conceptual](https://i.imgur.com/placeholder.png)  
-*(Nota: Reemplazar con un logo que combine una serpiente de agua con jeroglíficos egipcios)*
-
 ---
 
 ## 🌊 ¿Qué es Mizu Hebi Dyefet?  
@@ -29,7 +25,6 @@ Un prototipo interactivo que ejecuta **Python directamente en el navegador** usa
 ## 🚀 Cómo Usar  
 1. **Visita la demo**:  
    [https://mizulegendsstudios.github.io/mizu-hebi-dyefet](https://mizulegendsstudios.github.io/mizu-hebi-dyefet)  
-   *(Reemplaza `[usuario]` con tu nombre de usuario de GitHub)*  
 
 2. **Escribe código Python** en el editor:  
    ```python
@@ -113,33 +108,14 @@ for angulo in range(0, 360, 30):
 
 ## 📄 Licencia  
 [AGPL 3.0 License](LICENSE)  
-*Inspired by the eternal flow of the Nile and the purity of Mount Fuji's waters*  
 
 ---
 
 ## 🙏 Agradecimientos  
 - [Pyodide](https://github.com/pyodide/pyodide) por hacer posible Python en el navegador  
-- Diseño inspirado en [Papyri de Egipto](https://www.britishmuseum.org/collection/object/Y_EA77041) y [Ukiyo-e de Hokusai](https://www.metmuseum.org/art/collection/search/45434)  
-- Comunidad GitHub por mantener viva la colaboración global  
+- Diseño inspirado en [Papyri de Egipto](https://www.britishmuseum.org/collection/object/Y_EA77041) y [Ukiyo-e de Hokusai](https://www.metmuseum.org/art/collection/search/45434) - Comunidad GitHub por mantener viva la colaboración global  
 
 ---
 
 **Mizu Hebi Dyefet** - Donde el código fluye como el agua y se transforma como la serpiente.  
 *Made with 💙 en la nube, para el mundo.*  
-
----
-
-### 📌 Notas para implementación:  
-1. **Reemplaza placeholders**:  
-   - `[usuario]` en el enlace de demo  
-   - URL del logo en `![Logo Conceptual]`  
-2. **Añade screenshots**:  
-   - Capturas del editor en acción  
-   - Ejemplos de salida de código  
-3. **Crea un `LICENSE`** con texto de licencia MIT  
-4. **Personaliza colores**:  
-   - Usa paleta inspirada en:  
-     - Egipto: Oro (#D4AF37), Turquesa (#40E0D0)  
-     - Japón: Rojo torii (#DC143C), Verde musgo (#8FBC8F)  
-
-
